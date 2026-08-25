@@ -28,7 +28,7 @@ public class Main extends EngineFrame {
     
     
     public Main() { 
-        super(1350, 720, "Simuladores Ordenação", 60, true);  
+        super(1400, 720, "Simuladores Ordenação", 60, true);  
         
     }
     
@@ -70,6 +70,7 @@ public class Main extends EngineFrame {
         
         clearBackground( WHITE );  
         
+        
         desenharEstadoOrdenacao( copias.get(copiaAtual) );
         
     }
@@ -79,7 +80,11 @@ public class Main extends EngineFrame {
         int tamanho = 25;
         int espacamento = 5;
         int iniX = 10;
-        int iniY = getScreenHeight()/ 2 - 80;
+        int iniY = getScreenHeight()/ 2 - 30;
+        
+        int tamanhoQuadrado = 0;
+        tamanhoQuadrado = 5 + (tamanho + espacamento) * a.length;
+        drawRectangle(iniX - 5, 30, tamanhoQuadrado, tamanhoQuadrado, BLACK);
         
         for(int i = 0; i < a.length; i++){
             
