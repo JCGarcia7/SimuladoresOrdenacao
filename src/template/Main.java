@@ -133,6 +133,17 @@ public class Main extends EngineFrame {
         a[p2] = t;
     }
     
+    private void insertionSort(int[] insert, List<EstadoOrdenacao> copias){
+        int tamanho = insert.length;
+        for(int i = 1; i < tamanho; i++){
+            int j = i;
+            while(j > 0 && insert[j - 1] > insert[j]){
+                trocar(insert, j-1, j);
+                j--;
+            }
+        }
+    }
+    
     private void salvarEstadoOrdenacao(int[] origem, int posI, int posJ, int posMenor, List<EstadoOrdenacao> copias){
         int[] copia = new int[origem.length];
         for(int i = 0; i < copia.length; i++){
