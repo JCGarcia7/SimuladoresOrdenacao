@@ -20,10 +20,16 @@ public class Main extends EngineFrame {
     
     private int[] aSelection;
     private int[] aInsertion;
+    private int[] aBubble;
+    private int[] aShell;
     private List<EstadoOrdenacao> copiasSelection;
     private List<EstadoOrdenacao> copiasInsertion;
+    private List<EstadoOrdenacao> copiasBubble;
+    private List<EstadoOrdenacao> copiasShell;
     private int copiaAtualSelection;
     private int copiaAtualInsertion;
+    private int copiaAtualBubble;
+    private int copiaAtualShell;
     
     private double tempoParaMudar;
     private double contadorTempo;
@@ -31,7 +37,7 @@ public class Main extends EngineFrame {
     
     
     public Main() { 
-        super(1400, 720, "Simuladores Ordenação", 60, true);  
+        super(1310, 720, "Simuladores Ordenação", 60, true);  
         
     }
     
@@ -40,17 +46,27 @@ public class Main extends EngineFrame {
     public void create() {
         copiaAtualSelection = 0;
         copiaAtualInsertion = 0;
+        copiaAtualBubble = 0;
+        copiaAtualShell = 0;
         
         tempoParaMudar = 0.2;
         contadorTempo = 0;
         
         aSelection = new int[]{9, 5, 4, 1, 2, 7, 6, 8, 3, 10};
-        copiasSelection =new ArrayList<>();
+        copiasSelection = new ArrayList<>();
         selectionSort(aSelection, copiasSelection);
         
         aInsertion = new int[]{9, 5, 4, 1, 2, 7, 6, 8, 3, 10};
-        copiasInsertion =new ArrayList<>();
+        copiasInsertion = new ArrayList<>();
         insertionSort(aInsertion, copiasInsertion);
+        
+        aBubble = new int[]{9, 5, 4, 1, 2, 7, 6, 8, 3, 10};
+        copiasBubble = new ArrayList<>();
+        bubbleSort(aBubble, copiasBubble);
+        
+        aShell = new int[]{9, 5, 4, 1, 2, 7, 6, 8, 3, 10};
+        copiasShell = new ArrayList<>();
+        shellSort(aShell, copiasShell);
     }
 
     @Override
@@ -65,6 +81,12 @@ public class Main extends EngineFrame {
             }
             if (copiaAtualInsertion < copiasInsertion.size() - 1){
                 copiaAtualInsertion++;
+            }
+            if (copiaAtualBubble < copiasBubble.size() - 1){
+                copiaAtualBubble++;
+            }
+            if (copiaAtualShell < copiasShell.size() - 1){
+                copiaAtualShell++;
             }
             contadorTempo = 0;
         }
@@ -82,10 +104,16 @@ public class Main extends EngineFrame {
         
         clearBackground( WHITE );  
         
+        drawText("Selection Sort", 20, 10, 20, DARKPURPLE);
+        drawText("Insertion Sort", 345, 10, 20, DARKPURPLE);
+        drawText("Bubble Sort", 670, 10, 20, DARKPURPLE);
+        drawText("Shell Sort", 995, 10, 20, DARKPURPLE);
         
-        desenharEstadoOrdenacao( copiasSelection.get(copiaAtualSelection), 10, getScreenHeight() / 2 - 30 );
-        desenharEstadoOrdenacao(copiasInsertion.get(copiaAtualInsertion), 315,  getScreenHeight() / 2 - 30 );
         
+        desenharEstadoOrdenacao( copiasSelection.get(copiaAtualSelection), 20, getScreenHeight() / 2 - 30 );
+        desenharEstadoOrdenacao(copiasInsertion.get(copiaAtualInsertion), 345,  getScreenHeight() / 2 - 30 );
+        desenharEstadoOrdenacao(copiasBubble.get(copiaAtualBubble), 670,  getScreenHeight() / 2 - 30 );
+        desenharEstadoOrdenacao(copiasShell.get(copiaAtualShell), 995,  getScreenHeight() / 2 - 30 );
     }
 
     private void desenharEstadoOrdenacao( EstadoOrdenacao e, int iniX, int iniY) {
@@ -96,7 +124,7 @@ public class Main extends EngineFrame {
         
         int tamanhoQuadrado = 0;
         tamanhoQuadrado = 5 + (tamanho + espacamento) * a.length;
-        drawRectangle(iniX - 5, 30, tamanhoQuadrado, tamanhoQuadrado, BLACK);
+        drawRectangle(iniX - 5, iniY - getScreenHeight() / 2 + 60, tamanhoQuadrado, tamanhoQuadrado, BLACK);
         
         for(int i = 0; i < a.length; i++){
             
@@ -135,7 +163,7 @@ public class Main extends EngineFrame {
             trocar (a, i, menor);
             
             salvarEstadoOrdenacao(a, i, -1, menor, copias);
-            
+            salvarEstadoOrdenacao(a, i, -1, -1, copias);
         }
     }
     
@@ -151,11 +179,53 @@ public class Main extends EngineFrame {
         for(int i = 1; i < tamanho; i++){
             int j = i;
             while(j > 0 && insert[j - 1] > insert[j]){
-                trocar(insert, j-1, j);
                 salvarEstadoOrdenacao(insert, i, j, j - 1, copias);
+                trocar(insert, j-1, j);
                 j--;
             }
             salvarEstadoOrdenacao(insert, i, -1, -1, copias);
+        }
+    }
+    
+    private void bubbleSort(int[] bubble, List<EstadoOrdenacao> copias){
+        int tamanho = bubble.length;
+        int i = 0;
+        boolean trocado;
+        salvarEstadoOrdenacao(bubble, i, -1, -1, copias);
+        do {
+            trocado = false;
+            for(int j = tamanho - 1; j > i; j--){
+                if (bubble[j-1] > bubble[j]){
+                    salvarEstadoOrdenacao(bubble, i, j, j - 1, copias);
+                    trocar(bubble, j-1, j);
+                    trocado = true;
+                }
+            }
+            i++;
+             salvarEstadoOrdenacao(bubble, i, -1, -1, copias);
+        } while (trocado && i < tamanho);
+        
+    }
+    
+    private void shellSort(int[] shell, List<EstadoOrdenacao> copias){
+        int h = 1;
+        int tamanho = shell.length;
+        salvarEstadoOrdenacao(shell, -1, -1, -1, copias);
+        while( h < tamanho / 3){
+            h = 3 * h + 1;
+            salvarEstadoOrdenacao(shell, h, -1, -1, copias);
+        }
+        while (h >= 1){
+            for (int i = h; i < tamanho; i++){
+                int j = i;
+                while(j >= h && shell[j-h] > shell[j]){
+                    salvarEstadoOrdenacao(shell, h, j-h, j, copias);
+                    trocar(shell, j-h, j);
+                    j = j - h;
+                }
+            }
+            h = h / 3;
+            salvarEstadoOrdenacao(shell, h, -1, -1, copias);
         }
     }
     
@@ -172,6 +242,8 @@ public class Main extends EngineFrame {
     private void resetar(){
         copiaAtualSelection = 0;
         copiaAtualInsertion = 0;
+        copiaAtualBubble = 0;
+        copiaAtualShell = 0;
         
         tempoParaMudar = 0.2;
         contadorTempo = 0;
@@ -183,6 +255,14 @@ public class Main extends EngineFrame {
         aInsertion = new int[]{9, 5, 4, 1, 2, 7, 6, 8, 3, 10};
         copiasInsertion =new ArrayList<>();
         insertionSort(aInsertion, copiasInsertion);
+        
+        aBubble = new int[]{9, 5, 4, 1, 2, 7, 6, 8, 3, 10};
+        copiasBubble =new ArrayList<>();
+        bubbleSort(aBubble, copiasBubble);
+        
+        aShell = new int[]{9, 5, 4, 1, 2, 7, 6, 8, 3, 10};
+        copiasShell =new ArrayList<>();
+        shellSort(aShell, copiasShell);
         
     }
     
