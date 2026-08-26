@@ -24,18 +24,21 @@ public class Main extends EngineFrame {
     private int[] aShell;
     private int[] aMerge;
     private int[] aQuick;
+    private int[] aHeap;
     private List<EstadoOrdenacao> copiasSelection;
     private List<EstadoOrdenacao> copiasInsertion;
     private List<EstadoOrdenacao> copiasBubble;
     private List<EstadoOrdenacao> copiasShell;
     private List<EstadoOrdenacao> copiasMerge;
     private List<EstadoOrdenacao> copiasQuick;
+    private List<EstadoOrdenacao> copiasHeap;
     private int copiaAtualSelection;
     private int copiaAtualInsertion;
     private int copiaAtualBubble;
     private int copiaAtualShell;
     private int copiaAtualMerge;
     private int copiaAtualQuick;
+    private int copiaAtualHeap;
     
     private double tempoParaMudar;
     private double contadorTempo;
@@ -56,6 +59,7 @@ public class Main extends EngineFrame {
         copiaAtualShell = 0;
         copiaAtualMerge = 0;
         copiaAtualQuick = 0;
+        copiaAtualHeap = 0;
         
         tempoParaMudar = 0.2;
         contadorTempo = 0;
@@ -84,7 +88,9 @@ public class Main extends EngineFrame {
         copiasQuick = new ArrayList<>();
         quickSort(aQuick, copiasQuick);
         
-    
+        aHeap = new int [] { 9, 5, 4, 1, 2, 7, 6, 8, 3, 10 };
+        copiasHeap = new ArrayList<>();
+        heapSort (aHeap, copiasHeap);
     }
 
     @Override
@@ -112,6 +118,9 @@ public class Main extends EngineFrame {
             if (copiaAtualQuick < copiasQuick.size() - 1 ){
                 copiaAtualQuick++;
             }
+            if (copiaAtualHeap < copiasHeap.size() - 1 ){
+                copiaAtualHeap++;
+            }
             contadorTempo = 0;
         }
         
@@ -134,6 +143,7 @@ public class Main extends EngineFrame {
         drawText("Shell Sort", 995, 10, 20, DARKPURPLE);
         drawText("Merge Sort", 20, 370, 20, DARKPURPLE);
         drawText("Quick Sort", 345, 370, 20, DARKPURPLE);
+        drawText("Heap Sort", 670, 370, 20, DARKPURPLE);
         
         desenharEstadoOrdenacao( copiasSelection.get(copiaAtualSelection), 20, getScreenHeight() / 2 - 30 );
         desenharEstadoOrdenacao(copiasInsertion.get(copiaAtualInsertion), 345,  getScreenHeight() / 2 - 30 );
@@ -141,6 +151,7 @@ public class Main extends EngineFrame {
         desenharEstadoOrdenacao(copiasShell.get(copiaAtualShell), 995, getScreenHeight() / 2 - 30 );
         desenharEstadoOrdenacao(copiasMerge.get(copiaAtualMerge), 20, getScreenHeight() / 2 + 330);
         desenharEstadoOrdenacao(copiasQuick.get(copiaAtualQuick), 345, getScreenHeight() / 2 + 330);
+        desenharEstadoOrdenacao(copiasHeap.get(copiaAtualHeap), 670, getScreenHeight() / 2 + 330);
     }
 
     private void desenharEstadoOrdenacao( EstadoOrdenacao e, int iniX, int iniY) {
@@ -356,6 +367,56 @@ public class Main extends EngineFrame {
             
             quickSort(quick, inicio, meio - 1, copias);
             quickSort(quick, meio + 1, fim, copias);
+        }
+    }
+    
+    private void heapSort ( int [] heap, List<EstadoOrdenacao> copias){
+        salvarEstadoOrdenacao(heap, -1, -1, -1, copias);
+        
+        int tamanho = heap.length;
+        
+        for (int i = tamanho / 2 - 1; i >= 0; i--){
+            heapify(heap, tamanho, i, copias);
+        }
+        
+        for (int i = tamanho - 1; i > 0; i--){
+            salvarEstadoOrdenacao(heap, 0, i, -1, copias);
+            trocar(heap, 0, i);
+            salvarEstadoOrdenacao(heap, 0, i, -1, copias);
+            
+            heapify(heap, i, 0, copias);
+        }
+        
+        salvarEstadoOrdenacao(heap, -1, -1, -1, copias);
+    }
+    
+    private void heapify ( int [] heap, int tamanho, int raiz, List<EstadoOrdenacao> copias){
+        int maior = raiz;
+        int esquerda = 2 * raiz + 1;
+        int direita = 2 * raiz + 2;
+        
+        if (esquerda < tamanho){
+            salvarEstadoOrdenacao(heap, raiz, esquerda, maior, copias);
+            
+            if (heap[esquerda] > heap[maior]){
+                maior = esquerda;
+            }
+        }
+        
+        if (direita < tamanho){
+            salvarEstadoOrdenacao(heap, raiz, direita, maior, copias);
+            
+            if (heap[direita] > heap[maior]){
+                maior = direita;
+            }
+        }
+        
+        if (maior != raiz){
+            salvarEstadoOrdenacao(heap, raiz, maior, maior, copias);
+            trocar(heap, raiz, maior);
+            salvarEstadoOrdenacao(heap, raiz, maior, maior, copias);
+            
+            heapify(heap, tamanho, maior, copias);
         }
     }
     
