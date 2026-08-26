@@ -23,16 +23,19 @@ public class Main extends EngineFrame {
     private int[] aBubble;
     private int[] aShell;
     private int[] aMerge;
+    private int[] aQuick;
     private List<EstadoOrdenacao> copiasSelection;
     private List<EstadoOrdenacao> copiasInsertion;
     private List<EstadoOrdenacao> copiasBubble;
     private List<EstadoOrdenacao> copiasShell;
     private List<EstadoOrdenacao> copiasMerge;
+    private List<EstadoOrdenacao> copiasQuick;
     private int copiaAtualSelection;
     private int copiaAtualInsertion;
     private int copiaAtualBubble;
     private int copiaAtualShell;
     private int copiaAtualMerge;
+    private int copiaAtualQuick;
     
     private double tempoParaMudar;
     private double contadorTempo;
@@ -52,6 +55,7 @@ public class Main extends EngineFrame {
         copiaAtualBubble = 0;
         copiaAtualShell = 0;
         copiaAtualMerge = 0;
+        copiaAtualQuick = 0;
         
         tempoParaMudar = 0.2;
         contadorTempo = 0;
@@ -76,6 +80,11 @@ public class Main extends EngineFrame {
         copiasMerge = new ArrayList<>();
         mergeSort(aMerge, copiasMerge);
         
+        aQuick = new int [] { 9, 5, 4, 1, 2, 7, 6, 8, 3, 10 };
+        copiasQuick = new ArrayList<>();
+        quickSort(aQuick, copiasQuick);
+        
+    
     }
 
     @Override
@@ -100,6 +109,9 @@ public class Main extends EngineFrame {
             if (copiaAtualMerge < copiasMerge.size() - 1 ){
                 copiaAtualMerge++;
             }
+            if (copiaAtualQuick < copiasQuick.size() - 1 ){
+                copiaAtualQuick++;
+            }
             contadorTempo = 0;
         }
         
@@ -121,13 +133,14 @@ public class Main extends EngineFrame {
         drawText("Bubble Sort", 670, 10, 20, DARKPURPLE);
         drawText("Shell Sort", 995, 10, 20, DARKPURPLE);
         drawText("Merge Sort", 20, 370, 20, DARKPURPLE);
-        
+        drawText("Quick Sort", 345, 370, 20, DARKPURPLE);
         
         desenharEstadoOrdenacao( copiasSelection.get(copiaAtualSelection), 20, getScreenHeight() / 2 - 30 );
         desenharEstadoOrdenacao(copiasInsertion.get(copiaAtualInsertion), 345,  getScreenHeight() / 2 - 30 );
         desenharEstadoOrdenacao(copiasBubble.get(copiaAtualBubble), 670, getScreenHeight() / 2 - 30 );
         desenharEstadoOrdenacao(copiasShell.get(copiaAtualShell), 995, getScreenHeight() / 2 - 30 );
         desenharEstadoOrdenacao(copiasMerge.get(copiaAtualMerge), 20, getScreenHeight() / 2 + 330);
+        desenharEstadoOrdenacao(copiasQuick.get(copiaAtualQuick), 345, getScreenHeight() / 2 + 330);
     }
 
     private void desenharEstadoOrdenacao( EstadoOrdenacao e, int iniX, int iniY) {
@@ -293,6 +306,56 @@ public class Main extends EngineFrame {
                 merge[inicio + k] = auxiliar[k];
                 salvarEstadoOrdenacao(merge, inicio + k, -1, -1, copias);
             }
+        }
+    }
+    
+    private void quickSort ( int [] quick, List<EstadoOrdenacao> copias){
+        salvarEstadoOrdenacao(quick, -1, -1, -1, copias);
+        quickSort(quick, 0, quick.length - 1, copias);
+    }
+    
+    private int particao ( int[] quick, int inicio, int fim, List<EstadoOrdenacao> copias){
+        int pivo = quick[inicio];
+        int i = inicio + 1;
+        int j = fim;
+        
+        while (true){
+            
+            while (i <= fim && quick[i] < pivo){
+                salvarEstadoOrdenacao(quick, i, j, inicio, copias);
+                i++;
+            }
+            
+            while (j > inicio && quick[j] > pivo){
+                salvarEstadoOrdenacao(quick, i, j, inicio, copias);
+                j--;
+            }
+            
+            if (i >= j){
+                break;
+            }
+            
+            salvarEstadoOrdenacao(quick, i, j, inicio, copias);
+            trocar(quick, i, j);
+            salvarEstadoOrdenacao(quick, i, j, inicio, copias);
+            
+            i++;
+            j--;
+        }
+        
+        trocar(quick, inicio, j);
+        salvarEstadoOrdenacao(quick, inicio, j, j, copias);
+        
+        return j;
+    }
+    
+    private void quickSort ( int[] quick, int inicio, int fim, List<EstadoOrdenacao> copias ){
+        if (inicio < fim){
+            
+            int meio = particao(quick, inicio, fim, copias);
+            
+            quickSort(quick, inicio, meio - 1, copias);
+            quickSort(quick, meio + 1, fim, copias);
         }
     }
     
