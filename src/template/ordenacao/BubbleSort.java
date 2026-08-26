@@ -1,0 +1,38 @@
+package template.ordenacao;
+
+import java.util.List;
+import template.modelo.EstadoOrdenacao;
+import static template.ordenacao.OrdenacaoUtils.salvarEstadoOrdenacao;
+import static template.ordenacao.OrdenacaoUtils.trocar;
+
+/**
+ * Algoritmo de ordenação Bubble Sort.
+ * 
+ * @author Júlio César Dias Garcia e João Guilherme Eickhoff
+ */
+public class BubbleSort {
+    
+    private BubbleSort() {
+    }
+    
+    public static void bubbleSort(int[] bubble, List<EstadoOrdenacao> copias){
+        int tamanho = bubble.length;
+        int i = 0;
+        boolean trocado;
+        salvarEstadoOrdenacao(bubble, i, -1, -1, copias);
+        do {
+            trocado = false;
+            for(int j = tamanho - 1; j > i; j--){
+                if (bubble[j-1] > bubble[j]){
+                    salvarEstadoOrdenacao(bubble, i, j, j - 1, copias);
+                    trocar(bubble, j-1, j);
+                    trocado = true;
+                }
+            }
+            i++;
+             salvarEstadoOrdenacao(bubble, i, -1, -1, copias);
+        } while (trocado && i < tamanho);
+        
+    }
+    
+}

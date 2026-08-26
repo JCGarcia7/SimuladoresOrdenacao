@@ -7,6 +7,14 @@ import br.com.davidbuzatto.jsge.geom.Rectangle;
 import br.com.davidbuzatto.jsge.image.Image;
 import java.util.ArrayList;
 import java.util.List;
+import template.modelo.EstadoOrdenacao;
+import static template.ordenacao.BubbleSort.bubbleSort;
+import static template.ordenacao.HeapSort.heapSort;
+import static template.ordenacao.InsertionSort.insertionSort;
+import static template.ordenacao.MergeSort.mergeSort;
+import static template.ordenacao.QuickSort.quickSort;
+import static template.ordenacao.SelectionSort.selectionSort;
+import static template.ordenacao.ShellSort.shellSort;
 
 /**
  * Simuladores de algoritmosde ordenação.
@@ -15,8 +23,6 @@ import java.util.List;
  */
 
 public class Main extends EngineFrame {
-    
-    private record EstadoOrdenacao(int[] a, int i, int j, int menor){}
     
     private int[] aSelection;
     private int[] aInsertion;
@@ -155,7 +161,7 @@ public class Main extends EngineFrame {
     }
 
     private void desenharEstadoOrdenacao( EstadoOrdenacao e, int iniX, int iniY) {
-        int [] a = e.a;
+        int [] a = e.a();
         int tamanho = 25;
         int espacamento = 5;
         
@@ -174,260 +180,16 @@ public class Main extends EngineFrame {
             
             
         }
-        if (e.i >= 0){ 
-            fillCircle(iniX + e.i * (tamanho + espacamento) + tamanho / 2, iniY - a[e.i] * tamanho - 10, 5, ORANGE);
+        if (e.i() >= 0){ 
+            fillCircle(iniX + e.i() * (tamanho + espacamento) + tamanho / 2, iniY - a[e.i()] * tamanho - 10, 5, ORANGE);
         }
-        if (e.j >= 0){
-            fillCircle(iniX + e.j * (tamanho + espacamento) + tamanho / 2, iniY - a[e.j] * tamanho - 20, 5, BLUE);
+        if (e.j() >= 0){
+            fillCircle(iniX + e.j() * (tamanho + espacamento) + tamanho / 2, iniY - a[e.j()] * tamanho - 20, 5, BLUE);
         }
-        if (e.menor >= 0){
-            fillCircle(iniX + e.menor * (tamanho + espacamento) + tamanho / 2, iniY - a[e.menor] * tamanho - 30, 5, RED);   
+        if (e.menor() >= 0){
+            fillCircle(iniX + e.menor() * (tamanho + espacamento) + tamanho / 2, iniY - a[e.menor()] * tamanho - 30, 5, RED);   
         }
 
-    }
-    
-    private void selectionSort(int[] a, List<EstadoOrdenacao> copias){
-        
-        salvarEstadoOrdenacao(a, -1, -1, -1, copias);
-        
-        for (int i = 0; i < a.length; i++){
-            int menor = i;
-            for (int j = i + 1; j < a.length; j++){
-                if (a[menor] > a[j]) {
-                    menor = j;
-                }
-                salvarEstadoOrdenacao(a, i, j, menor, copias);
-            }
-            trocar (a, i, menor);
-            
-            salvarEstadoOrdenacao(a, i, -1, menor, copias);
-            salvarEstadoOrdenacao(a, i, -1, -1, copias);
-        }
-    }
-    
-    private void trocar(int[] a, int p1, int p2){
-        int t = a[p1];
-        a[p1] = a[p2];
-        a[p2] = t;
-    }
-    
-    private void insertionSort(int[] insert, List<EstadoOrdenacao> copias){
-        int tamanho = insert.length;
-        salvarEstadoOrdenacao(insert, -1, -1, -1, copias);
-        for(int i = 1; i < tamanho; i++){
-            int j = i;
-            while(j > 0 && insert[j - 1] > insert[j]){
-                salvarEstadoOrdenacao(insert, i, j, j - 1, copias);
-                trocar(insert, j-1, j);
-                j--;
-            }
-            salvarEstadoOrdenacao(insert, i, -1, -1, copias);
-        }
-    }
-    
-    private void bubbleSort(int[] bubble, List<EstadoOrdenacao> copias){
-        int tamanho = bubble.length;
-        int i = 0;
-        boolean trocado;
-        salvarEstadoOrdenacao(bubble, i, -1, -1, copias);
-        do {
-            trocado = false;
-            for(int j = tamanho - 1; j > i; j--){
-                if (bubble[j-1] > bubble[j]){
-                    salvarEstadoOrdenacao(bubble, i, j, j - 1, copias);
-                    trocar(bubble, j-1, j);
-                    trocado = true;
-                }
-            }
-            i++;
-             salvarEstadoOrdenacao(bubble, i, -1, -1, copias);
-        } while (trocado && i < tamanho);
-        
-    }
-    
-    private void shellSort(int[] shell, List<EstadoOrdenacao> copias){
-        int h = 1;
-        int tamanho = shell.length;
-        salvarEstadoOrdenacao(shell, -1, -1, -1, copias);
-        while( h < tamanho / 3){
-            h = 3 * h + 1;
-            salvarEstadoOrdenacao(shell, h, -1, -1, copias);
-        }
-        while (h >= 1){
-            for (int i = h; i < tamanho; i++){
-                int j = i;
-                while(j >= h && shell[j-h] > shell[j]){
-                    salvarEstadoOrdenacao(shell, h, j-h, j, copias);
-                    trocar(shell, j-h, j);
-                    j = j - h;
-                }
-            }
-            h = h / 3;
-            salvarEstadoOrdenacao(shell, h, -1, -1, copias);
-        }
-    }
-    
-    private void mergeSort( int [] merge, List<EstadoOrdenacao> copias ){
-        
-        salvarEstadoOrdenacao(merge, -1, -1, -1, copias);
-        mergeSort(merge, 0, merge.length - 1, copias);
-    }
-
-    private void mergeSort(int[] merge, int inicio, int fim, List<EstadoOrdenacao> copias) {
-        if (inicio < fim) {
-            int meio = (inicio + fim) / 2;
-
-            mergeSort(merge, inicio, meio, copias);
-            mergeSort(merge, meio + 1, fim, copias);
-
-            int[] auxiliar = new int[fim - inicio + 1];
-
-            int i = inicio;
-            int j = meio + 1;
-            int k = 0;
-
-            while (i <= meio && j <= fim) {
-
-                salvarEstadoOrdenacao(merge, i, j, -1, copias);
-
-                if (merge[i] <= merge[j]) {
-                    auxiliar[k] = merge[i];
-                    i++;
-                } else {
-                    auxiliar[k] = merge[j];
-                    j++;
-                }
-
-                k++;
-            }
-
-            while (i <= meio) {
-                auxiliar[k] = merge[i];
-                i++;
-                k++;
-            }
-
-            while (j <= fim) {
-                auxiliar[k] = merge[j];
-                j++;
-                k++;
-            }
-
-            for (k = 0; k < auxiliar.length; k++) {
-                merge[inicio + k] = auxiliar[k];
-                salvarEstadoOrdenacao(merge, inicio + k, -1, -1, copias);
-            }
-        }
-    }
-    
-    private void quickSort ( int [] quick, List<EstadoOrdenacao> copias){
-        salvarEstadoOrdenacao(quick, -1, -1, -1, copias);
-        quickSort(quick, 0, quick.length - 1, copias);
-    }
-    
-    private int particao ( int[] quick, int inicio, int fim, List<EstadoOrdenacao> copias){
-        int pivo = quick[inicio];
-        int i = inicio + 1;
-        int j = fim;
-        
-        while (true){
-            
-            while (i <= fim && quick[i] < pivo){
-                salvarEstadoOrdenacao(quick, i, j, inicio, copias);
-                i++;
-            }
-            
-            while (j > inicio && quick[j] > pivo){
-                salvarEstadoOrdenacao(quick, i, j, inicio, copias);
-                j--;
-            }
-            
-            if (i >= j){
-                break;
-            }
-            
-            salvarEstadoOrdenacao(quick, i, j, inicio, copias);
-            trocar(quick, i, j);
-            salvarEstadoOrdenacao(quick, i, j, inicio, copias);
-            
-            i++;
-            j--;
-        }
-        
-        trocar(quick, inicio, j);
-        salvarEstadoOrdenacao(quick, inicio, j, j, copias);
-        
-        return j;
-    }
-    
-    private void quickSort ( int[] quick, int inicio, int fim, List<EstadoOrdenacao> copias ){
-        if (inicio < fim){
-            
-            int meio = particao(quick, inicio, fim, copias);
-            
-            quickSort(quick, inicio, meio - 1, copias);
-            quickSort(quick, meio + 1, fim, copias);
-        }
-    }
-    
-    private void heapSort ( int [] heap, List<EstadoOrdenacao> copias){
-        salvarEstadoOrdenacao(heap, -1, -1, -1, copias);
-        
-        int tamanho = heap.length;
-        
-        for (int i = tamanho / 2 - 1; i >= 0; i--){
-            heapify(heap, tamanho, i, copias);
-        }
-        
-        for (int i = tamanho - 1; i > 0; i--){
-            salvarEstadoOrdenacao(heap, 0, i, -1, copias);
-            trocar(heap, 0, i);
-            salvarEstadoOrdenacao(heap, 0, i, -1, copias);
-            
-            heapify(heap, i, 0, copias);
-        }
-        
-        salvarEstadoOrdenacao(heap, -1, -1, -1, copias);
-    }
-    
-    private void heapify ( int [] heap, int tamanho, int raiz, List<EstadoOrdenacao> copias){
-        int maior = raiz;
-        int esquerda = 2 * raiz + 1;
-        int direita = 2 * raiz + 2;
-        
-        if (esquerda < tamanho){
-            salvarEstadoOrdenacao(heap, raiz, esquerda, maior, copias);
-            
-            if (heap[esquerda] > heap[maior]){
-                maior = esquerda;
-            }
-        }
-        
-        if (direita < tamanho){
-            salvarEstadoOrdenacao(heap, raiz, direita, maior, copias);
-            
-            if (heap[direita] > heap[maior]){
-                maior = direita;
-            }
-        }
-        
-        if (maior != raiz){
-            salvarEstadoOrdenacao(heap, raiz, maior, maior, copias);
-            trocar(heap, raiz, maior);
-            salvarEstadoOrdenacao(heap, raiz, maior, maior, copias);
-            
-            heapify(heap, tamanho, maior, copias);
-        }
-    }
-    
-    private void salvarEstadoOrdenacao(int[] origem, int posI, int posJ, int posMenor, List<EstadoOrdenacao> copias){
-        int[] copia = new int[origem.length];
-        for(int i = 0; i < copia.length; i++){
-            copia[i] = origem[i];
-        }
-        
-        EstadoOrdenacao estadoCopia = new EstadoOrdenacao(copia, posI, posJ, posMenor);
-        copias.add(estadoCopia);   
     }
     
     private void resetar(){
