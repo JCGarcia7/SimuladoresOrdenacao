@@ -5,7 +5,6 @@ import template.modelo.EstadoOrdenacao;
 import static template.ordenacao.OrdenacaoUtils.salvarEstadoOrdenacao;
 
 /**
- * Algoritmo de ordenação Merge Sort.
  * 
  * @author Júlio César Dias Garcia e João Guilherme Eickhoff
  */

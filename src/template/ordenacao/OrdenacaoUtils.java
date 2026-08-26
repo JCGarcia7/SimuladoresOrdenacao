@@ -4,7 +4,6 @@ import java.util.List;
 import template.modelo.EstadoOrdenacao;
 
 /**
- * Métodos auxiliares utilizados por todos os algoritmos de ordenação.
  * 
  * @author Júlio César Dias Garcia e João Guilherme Eickhoff
  */

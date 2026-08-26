@@ -6,7 +6,6 @@ import static template.ordenacao.OrdenacaoUtils.salvarEstadoOrdenacao;
 import static template.ordenacao.OrdenacaoUtils.trocar;
 
 /**
- * Algoritmo de ordenação Selection Sort.
  * 
  * @author Júlio César Dias Garcia e João Guilherme Eickhoff
  */
