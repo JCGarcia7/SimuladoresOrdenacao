@@ -11,16 +11,19 @@ import java.util.List;
 /**
  * Simuladores de algoritmosde ordenação.
  * 
- * @author julio
+ * @author Júlio César Dias Garcia e João Guilherme Eickhoff
  */
 
 public class Main extends EngineFrame {
     
     private record EstadoOrdenacao(int[] a, int i, int j, int menor){};
     
-    private int[] a;
-    private List<EstadoOrdenacao> copias;
-    private int copiaAtual;
+    private int[] aSelection;
+    private int[] aInsertion;
+    private List<EstadoOrdenacao> copiasSelection;
+    private List<EstadoOrdenacao> copiasInsertion;
+    private int copiaAtualSelection;
+    private int copiaAtualInsertion;
     
     private double tempoParaMudar;
     private double contadorTempo;
@@ -35,14 +38,19 @@ public class Main extends EngineFrame {
 
     @Override
     public void create() {
-      a = new int[]{9, 5, 4, 1, 2, 7, 6, 8, 3, 10};
-        copias =new ArrayList<>();
-        copiaAtual = 0;
+        copiaAtualSelection = 0;
+        copiaAtualInsertion = 0;
         
         tempoParaMudar = 0.2;
         contadorTempo = 0;
         
-        selectionSort(a, copias);
+        aSelection = new int[]{9, 5, 4, 1, 2, 7, 6, 8, 3, 10};
+        copiasSelection =new ArrayList<>();
+        selectionSort(aSelection, copiasSelection);
+        
+        aInsertion = new int[]{9, 5, 4, 1, 2, 7, 6, 8, 3, 10};
+        copiasInsertion =new ArrayList<>();
+        insertionSort(aInsertion, copiasInsertion);
     }
 
     @Override
@@ -51,8 +59,12 @@ public class Main extends EngineFrame {
         contadorTempo += delta;
         
         if(contadorTempo >= tempoParaMudar){
-            if (copiaAtual < copias.size() - 1 ){
-            copiaAtual++;
+            
+            if (copiaAtualSelection < copiasSelection.size() - 1 ){
+                copiaAtualSelection++;
+            }
+            if (copiaAtualInsertion < copiasInsertion.size() - 1){
+                copiaAtualInsertion++;
             }
             contadorTempo = 0;
         }
@@ -71,16 +83,16 @@ public class Main extends EngineFrame {
         clearBackground( WHITE );  
         
         
-        desenharEstadoOrdenacao( copias.get(copiaAtual) );
+        desenharEstadoOrdenacao( copiasSelection.get(copiaAtualSelection), 10, getScreenHeight() / 2 - 30 );
+        desenharEstadoOrdenacao(copiasInsertion.get(copiaAtualInsertion), 315,  getScreenHeight() / 2 - 30 );
         
     }
 
-    private void desenharEstadoOrdenacao( EstadoOrdenacao e) {
+    private void desenharEstadoOrdenacao( EstadoOrdenacao e, int iniX, int iniY) {
         int [] a = e.a;
         int tamanho = 25;
         int espacamento = 5;
-        int iniX = 10;
-        int iniY = getScreenHeight()/ 2 - 30;
+        
         
         int tamanhoQuadrado = 0;
         tamanhoQuadrado = 5 + (tamanho + espacamento) * a.length;
@@ -135,12 +147,15 @@ public class Main extends EngineFrame {
     
     private void insertionSort(int[] insert, List<EstadoOrdenacao> copias){
         int tamanho = insert.length;
+        salvarEstadoOrdenacao(insert, -1, -1, -1, copias);
         for(int i = 1; i < tamanho; i++){
             int j = i;
             while(j > 0 && insert[j - 1] > insert[j]){
                 trocar(insert, j-1, j);
+                salvarEstadoOrdenacao(insert, i, j, j - 1, copias);
                 j--;
             }
+            salvarEstadoOrdenacao(insert, i, -1, -1, copias);
         }
     }
     
@@ -151,19 +166,24 @@ public class Main extends EngineFrame {
         }
         
         EstadoOrdenacao estadoCopia = new EstadoOrdenacao(copia, posI, posJ, posMenor);
-        copias.add(estadoCopia);
-        
+        copias.add(estadoCopia);   
     }
     
     private void resetar(){
-        a = new int[]{9, 5, 4, 1, 2, 7, 6, 8, 3, 10};
-        copias =new ArrayList<>();
-        copiaAtual = 0;
+        copiaAtualSelection = 0;
+        copiaAtualInsertion = 0;
         
         tempoParaMudar = 0.2;
         contadorTempo = 0;
         
-        selectionSort(a, copias);
+        aSelection = new int[]{9, 5, 4, 1, 2, 7, 6, 8, 3, 10};
+        copiasSelection =new ArrayList<>();
+        selectionSort(aSelection, copiasSelection);
+        
+        aInsertion = new int[]{9, 5, 4, 1, 2, 7, 6, 8, 3, 10};
+        copiasInsertion =new ArrayList<>();
+        insertionSort(aInsertion, copiasInsertion);
+        
     }
     
     public static void main( String[] args ) {
