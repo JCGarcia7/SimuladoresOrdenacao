@@ -16,20 +16,23 @@ import java.util.List;
 
 public class Main extends EngineFrame {
     
-    private record EstadoOrdenacao(int[] a, int i, int j, int menor){};
+    private record EstadoOrdenacao(int[] a, int i, int j, int menor){}
     
     private int[] aSelection;
     private int[] aInsertion;
     private int[] aBubble;
     private int[] aShell;
+    private int[] aMerge;
     private List<EstadoOrdenacao> copiasSelection;
     private List<EstadoOrdenacao> copiasInsertion;
     private List<EstadoOrdenacao> copiasBubble;
     private List<EstadoOrdenacao> copiasShell;
+    private List<EstadoOrdenacao> copiasMerge;
     private int copiaAtualSelection;
     private int copiaAtualInsertion;
     private int copiaAtualBubble;
     private int copiaAtualShell;
+    private int copiaAtualMerge;
     
     private double tempoParaMudar;
     private double contadorTempo;
@@ -48,6 +51,7 @@ public class Main extends EngineFrame {
         copiaAtualInsertion = 0;
         copiaAtualBubble = 0;
         copiaAtualShell = 0;
+        copiaAtualMerge = 0;
         
         tempoParaMudar = 0.2;
         contadorTempo = 0;
@@ -67,6 +71,11 @@ public class Main extends EngineFrame {
         aShell = new int[]{9, 5, 4, 1, 2, 7, 6, 8, 3, 10};
         copiasShell = new ArrayList<>();
         shellSort(aShell, copiasShell);
+        
+        aMerge = new int [] { 9, 5, 4, 1, 2, 7, 6, 8, 3, 10 };
+        copiasMerge = new ArrayList<>();
+        mergeSort(aMerge, copiasMerge);
+        
     }
 
     @Override
@@ -88,6 +97,9 @@ public class Main extends EngineFrame {
             if (copiaAtualShell < copiasShell.size() - 1){
                 copiaAtualShell++;
             }
+            if (copiaAtualMerge < copiasMerge.size() - 1 ){
+                copiaAtualMerge++;
+            }
             contadorTempo = 0;
         }
         
@@ -108,12 +120,14 @@ public class Main extends EngineFrame {
         drawText("Insertion Sort", 345, 10, 20, DARKPURPLE);
         drawText("Bubble Sort", 670, 10, 20, DARKPURPLE);
         drawText("Shell Sort", 995, 10, 20, DARKPURPLE);
+        drawText("Merge Sort", 20, 370, 20, DARKPURPLE);
         
         
         desenharEstadoOrdenacao( copiasSelection.get(copiaAtualSelection), 20, getScreenHeight() / 2 - 30 );
         desenharEstadoOrdenacao(copiasInsertion.get(copiaAtualInsertion), 345,  getScreenHeight() / 2 - 30 );
-        desenharEstadoOrdenacao(copiasBubble.get(copiaAtualBubble), 670,  getScreenHeight() / 2 - 30 );
-        desenharEstadoOrdenacao(copiasShell.get(copiaAtualShell), 995,  getScreenHeight() / 2 - 30 );
+        desenharEstadoOrdenacao(copiasBubble.get(copiaAtualBubble), 670, getScreenHeight() / 2 - 30 );
+        desenharEstadoOrdenacao(copiasShell.get(copiaAtualShell), 995, getScreenHeight() / 2 - 30 );
+        desenharEstadoOrdenacao(copiasMerge.get(copiaAtualMerge), 20, getScreenHeight() / 2 + 330);
     }
 
     private void desenharEstadoOrdenacao( EstadoOrdenacao e, int iniX, int iniY) {
@@ -229,6 +243,59 @@ public class Main extends EngineFrame {
         }
     }
     
+    private void mergeSort( int [] merge, List<EstadoOrdenacao> copias ){
+        
+        salvarEstadoOrdenacao(merge, -1, -1, -1, copias);
+        mergeSort(merge, 0, merge.length - 1, copias);
+    }
+
+    private void mergeSort(int[] merge, int inicio, int fim, List<EstadoOrdenacao> copias) {
+        if (inicio < fim) {
+            int meio = (inicio + fim) / 2;
+
+            mergeSort(merge, inicio, meio, copias);
+            mergeSort(merge, meio + 1, fim, copias);
+
+            int[] auxiliar = new int[fim - inicio + 1];
+
+            int i = inicio;
+            int j = meio + 1;
+            int k = 0;
+
+            while (i <= meio && j <= fim) {
+
+                salvarEstadoOrdenacao(merge, i, j, -1, copias);
+
+                if (merge[i] <= merge[j]) {
+                    auxiliar[k] = merge[i];
+                    i++;
+                } else {
+                    auxiliar[k] = merge[j];
+                    j++;
+                }
+
+                k++;
+            }
+
+            while (i <= meio) {
+                auxiliar[k] = merge[i];
+                i++;
+                k++;
+            }
+
+            while (j <= fim) {
+                auxiliar[k] = merge[j];
+                j++;
+                k++;
+            }
+
+            for (k = 0; k < auxiliar.length; k++) {
+                merge[inicio + k] = auxiliar[k];
+                salvarEstadoOrdenacao(merge, inicio + k, -1, -1, copias);
+            }
+        }
+    }
+    
     private void salvarEstadoOrdenacao(int[] origem, int posI, int posJ, int posMenor, List<EstadoOrdenacao> copias){
         int[] copia = new int[origem.length];
         for(int i = 0; i < copia.length; i++){
@@ -244,6 +311,7 @@ public class Main extends EngineFrame {
         copiaAtualInsertion = 0;
         copiaAtualBubble = 0;
         copiaAtualShell = 0;
+        copiaAtualMerge = 0;
         
         tempoParaMudar = 0.2;
         contadorTempo = 0;
@@ -263,6 +331,10 @@ public class Main extends EngineFrame {
         aShell = new int[]{9, 5, 4, 1, 2, 7, 6, 8, 3, 10};
         copiasShell =new ArrayList<>();
         shellSort(aShell, copiasShell);
+        
+        aMerge = new int [] { 9, 5, 4, 1, 2, 7, 6, 8, 3, 10 };
+        copiasMerge = new ArrayList<>();
+        mergeSort(aMerge, copiasMerge);
         
     }
     
