@@ -5,6 +5,9 @@ import br.com.davidbuzatto.jsge.core.utils.CoreUtils;
 import br.com.davidbuzatto.jsge.core.utils.DrawingUtils;
 import br.com.davidbuzatto.jsge.geom.Rectangle;
 import br.com.davidbuzatto.jsge.image.Image;
+import br.com.davidbuzatto.jsge.imgui.GuiButton;
+import br.com.davidbuzatto.jsge.imgui.GuiComponent;
+import br.com.davidbuzatto.jsge.imgui.GuiLabel;
 import java.util.ArrayList;
 import java.util.List;
 import template.modelo.EstadoOrdenacao;
@@ -49,6 +52,10 @@ public class Main extends EngineFrame {
     private double tempoParaMudar;
     private double contadorTempo;
     
+    //private List<GuiComponent> components;
+    //private GuiButton SelectionButton;
+    //private boolean botaoApertado;
+    
     
     
     public Main() { 
@@ -59,6 +66,10 @@ public class Main extends EngineFrame {
 
     @Override
     public void create() {
+        //useAsDependencyForIMGUI();
+        // components = new ArrayList<>();
+        //botaoApertado = false;
+        
         copiaAtualSelection = 0;
         copiaAtualInsertion = 0;
         copiaAtualBubble = 0;
@@ -97,6 +108,11 @@ public class Main extends EngineFrame {
         aHeap = new int [] { 9, 5, 4, 1, 2, 7, 6, 8, 3, 10 };
         copiasHeap = new ArrayList<>();
         heapSort (aHeap, copiasHeap);
+        
+        //SelectionButton = new GuiButton(15, 90, 305, 305, "salve ");
+        //components.add(SelectionButton);
+        
+      
     }
 
     @Override
@@ -134,7 +150,9 @@ public class Main extends EngineFrame {
             resetar();
         }
         
-        
+        //if ( SelectionButton.isMousePressed()){
+        //    System.out.println(" botao apertou e foi bacana");
+        //}
         
     }
   
@@ -147,17 +165,17 @@ public class Main extends EngineFrame {
         drawText("Insertion Sort", 345, 10, 20, DARKPURPLE);
         drawText("Bubble Sort", 670, 10, 20, DARKPURPLE);
         drawText("Shell Sort", 995, 10, 20, DARKPURPLE);
-        drawText("Merge Sort", 20, 370, 20, DARKPURPLE);
-        drawText("Quick Sort", 345, 370, 20, DARKPURPLE);
-        drawText("Heap Sort", 670, 370, 20, DARKPURPLE);
+        drawText("Merge Sort", getScreenWidth() / 2 - 476, 665, 20, DARKPURPLE);
+        drawText("Quick Sort", getScreenWidth() / 2 - 151, 665, 20, DARKPURPLE);
+        drawText("Heap Sort", getScreenWidth() / 2 + 174, 665, 20, DARKPURPLE);
         
         desenharEstadoOrdenacao( copiasSelection.get(copiaAtualSelection), 20, getScreenHeight() / 2 - 30 );
         desenharEstadoOrdenacao(copiasInsertion.get(copiaAtualInsertion), 345,  getScreenHeight() / 2 - 30 );
         desenharEstadoOrdenacao(copiasBubble.get(copiaAtualBubble), 670, getScreenHeight() / 2 - 30 );
         desenharEstadoOrdenacao(copiasShell.get(copiaAtualShell), 995, getScreenHeight() / 2 - 30 );
-        desenharEstadoOrdenacao(copiasMerge.get(copiaAtualMerge), 20, getScreenHeight() / 2 + 330);
-        desenharEstadoOrdenacao(copiasQuick.get(copiaAtualQuick), 345, getScreenHeight() / 2 + 330);
-        desenharEstadoOrdenacao(copiasHeap.get(copiaAtualHeap), 670, getScreenHeight() / 2 + 330);
+        desenharEstadoOrdenacao(copiasMerge.get(copiaAtualMerge), getScreenWidth() / 2 - 476, getScreenHeight() - 65);
+        desenharEstadoOrdenacao(copiasQuick.get(copiaAtualQuick), getScreenWidth() / 2 - 151, getScreenHeight() - 65);
+        desenharEstadoOrdenacao(copiasHeap.get(copiaAtualHeap), getScreenWidth() / 2 + 174, getScreenHeight() - 65);
     }
 
     private void desenharEstadoOrdenacao( EstadoOrdenacao e, int iniX, int iniY) {
@@ -198,6 +216,8 @@ public class Main extends EngineFrame {
         copiaAtualBubble = 0;
         copiaAtualShell = 0;
         copiaAtualMerge = 0;
+        copiaAtualQuick = 0;
+        copiaAtualHeap = 0;
         
         tempoParaMudar = 0.2;
         contadorTempo = 0;
@@ -221,6 +241,14 @@ public class Main extends EngineFrame {
         aMerge = new int [] { 9, 5, 4, 1, 2, 7, 6, 8, 3, 10 };
         copiasMerge = new ArrayList<>();
         mergeSort(aMerge, copiasMerge);
+        
+        aQuick = new int [] { 9, 5, 4, 1, 2, 7, 6, 8, 3, 10 };
+        copiasQuick = new ArrayList<>();
+        quickSort(aQuick, copiasQuick);
+        
+        aHeap = new int [] { 9, 5, 4, 1, 2, 7, 6, 8, 3, 10 };
+        copiasHeap = new ArrayList<>();
+        heapSort(aHeap, copiasHeap);
         
     }
     
