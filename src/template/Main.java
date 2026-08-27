@@ -77,6 +77,8 @@ public class Main extends EngineFrame {
         copiaAtualQuick = 0;
         copiaAtualHeap = 0;
         
+        tamanhoQuadrado = 0;
+        
         tempoParaMudar = 0.2;
         contadorTempo = 0;
         
@@ -149,7 +151,7 @@ public class Main extends EngineFrame {
             resetar();
         }
         
-        if (isKeyPressed(KEY_ONE)){
+        if (SelectionButton.isMousePressed()){
             System.out.println(" botao apertou e foi bacana");
         }
         
@@ -160,30 +162,26 @@ public class Main extends EngineFrame {
         
         clearBackground( WHITE );  
         
-        drawText("Selection Sort", 20, 10, 20, DARKPURPLE);
-        drawText("Insertion Sort", 345, 10, 20, DARKPURPLE);
-        drawText("Bubble Sort", 670, 10, 20, DARKPURPLE);
-        drawText("Shell Sort", 995, 10, 20, DARKPURPLE);
-        drawText("Merge Sort", getScreenWidth() / 2 - 476, 665, 20, DARKPURPLE);
-        drawText("Quick Sort", getScreenWidth() / 2 - 151, 665, 20, DARKPURPLE);
-        drawText("Heap Sort", getScreenWidth() / 2 + 174, 665, 20, DARKPURPLE);
-        
-        desenharEstadoOrdenacao( copiasSelection.get(copiaAtualSelection), 20, getScreenHeight() / 2 - 30 );
-        desenharEstadoOrdenacao(copiasInsertion.get(copiaAtualInsertion), 345,  getScreenHeight() / 2 - 30 );
-        desenharEstadoOrdenacao(copiasBubble.get(copiaAtualBubble), 670, getScreenHeight() / 2 - 30 );
-        desenharEstadoOrdenacao(copiasShell.get(copiaAtualShell), 995, getScreenHeight() / 2 - 30 );
-        desenharEstadoOrdenacao(copiasMerge.get(copiaAtualMerge), getScreenWidth() / 2 - 476, getScreenHeight() - 65);
-        desenharEstadoOrdenacao(copiasQuick.get(copiaAtualQuick), getScreenWidth() / 2 - 151, getScreenHeight() - 65);
-        desenharEstadoOrdenacao(copiasHeap.get(copiaAtualHeap), getScreenWidth() / 2 + 174, getScreenHeight() - 65);
+        desenharEstadoOrdenacao( copiasSelection.get(copiaAtualSelection), 20, getScreenHeight() / 2 - 30, "SelectionSort" );
+        desenharEstadoOrdenacao(copiasInsertion.get(copiaAtualInsertion), 345,  getScreenHeight() / 2 - 30, "InsertionSort" );
+        desenharEstadoOrdenacao(copiasBubble.get(copiaAtualBubble), 670, getScreenHeight() / 2 - 30, "BubbleSort" );
+        desenharEstadoOrdenacao(copiasShell.get(copiaAtualShell), 995, getScreenHeight() / 2 - 30, "ShellSort" );
+        desenharEstadoOrdenacao(copiasMerge.get(copiaAtualMerge), getScreenWidth() / 2 - 476, getScreenHeight() - 65, "MergeSort");
+        desenharEstadoOrdenacao(copiasQuick.get(copiaAtualQuick), getScreenWidth() / 2 - 151, getScreenHeight() - 65, "QuickSort");
+        desenharEstadoOrdenacao(copiasHeap.get(copiaAtualHeap), getScreenWidth() / 2 + 174, getScreenHeight() - 65, "HeapSort");
     }
 
-    private void desenharEstadoOrdenacao( EstadoOrdenacao e, int iniX, int iniY) {
+    private void desenharEstadoOrdenacao( EstadoOrdenacao e, int iniX, int iniY, String nomeOrdenacao) {
         int [] a = e.a();
         int tamanho = 25;
         int espacamento = 5;
         
-        
-        tamanhoQuadrado = 0;
+        if(iniY < getScreenHeight() / 2){
+            drawText(nomeOrdenacao, iniX, 10, 20, DARKPURPLE);
+        } else {
+            drawText(nomeOrdenacao, iniX - 5, 665, 20, DARKPURPLE);
+        }
+                
         tamanhoQuadrado = 5 + (tamanho + espacamento) * a.length;
         drawRectangle(iniX - 5, iniY - getScreenHeight() / 2 + 60, tamanhoQuadrado, tamanhoQuadrado, BLACK);
         
