@@ -49,14 +49,14 @@ public class Main extends EngineFrame {
     private int copiaAtualQuick;
     private int copiaAtualHeap;
     
+    int tamanhoQuadrado;
+    
     private double tempoParaMudar;
     private double contadorTempo;
     
-    //private List<GuiComponent> components;
-    //private GuiButton SelectionButton;
-    //private boolean botaoApertado;
-    
-    
+    private List<GuiComponent> components;
+    private GuiButton SelectionButton;
+
     
     public Main() { 
         super(1310, 720, "Simuladores Ordenação", 60, true);  
@@ -66,9 +66,8 @@ public class Main extends EngineFrame {
 
     @Override
     public void create() {
-        //useAsDependencyForIMGUI();
-        // components = new ArrayList<>();
-        //botaoApertado = false;
+        useAsDependencyForIMGUI();
+        components = new ArrayList<>();
         
         copiaAtualSelection = 0;
         copiaAtualInsertion = 0;
@@ -109,8 +108,8 @@ public class Main extends EngineFrame {
         copiasHeap = new ArrayList<>();
         heapSort (aHeap, copiasHeap);
         
-        //SelectionButton = new GuiButton(15, 90, 305, 305, "salve ");
-        //components.add(SelectionButton);
+        SelectionButton = new GuiButton(15, 90, 305, 305, "salve ");
+        components.add(SelectionButton);
         
       
     }
@@ -150,9 +149,9 @@ public class Main extends EngineFrame {
             resetar();
         }
         
-        //if ( SelectionButton.isMousePressed()){
-        //    System.out.println(" botao apertou e foi bacana");
-        //}
+        if (isKeyPressed(KEY_ONE)){
+            System.out.println(" botao apertou e foi bacana");
+        }
         
     }
   
@@ -184,7 +183,7 @@ public class Main extends EngineFrame {
         int espacamento = 5;
         
         
-        int tamanhoQuadrado = 0;
+        tamanhoQuadrado = 0;
         tamanhoQuadrado = 5 + (tamanho + espacamento) * a.length;
         drawRectangle(iniX - 5, iniY - getScreenHeight() / 2 + 60, tamanhoQuadrado, tamanhoQuadrado, BLACK);
         
