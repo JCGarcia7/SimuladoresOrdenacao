@@ -29,8 +29,9 @@ public class SelectionSort {
             trocar (a, i, menor);
             
             salvarEstadoOrdenacao(a, i, -1, menor, copias);
-            salvarEstadoOrdenacao(a, i, -1, -1, copias);
         }
+        salvarEstadoOrdenacao(a, -1, -1, -1, copias);
+
     }
     
 }

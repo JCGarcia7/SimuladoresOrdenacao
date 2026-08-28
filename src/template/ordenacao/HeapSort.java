@@ -14,54 +14,36 @@ public class HeapSort {
     private HeapSort() {
     }
     
-    public static void heapSort ( int [] heap, List<EstadoOrdenacao> copias){
+    public static void heapSort(int[] heap, List<EstadoOrdenacao> copias){
+        int n = heap.length - 1;
         salvarEstadoOrdenacao(heap, -1, -1, -1, copias);
-        
-        int tamanho = heap.length;
-        
-        for (int i = tamanho / 2 - 1; i >= 0; i--){
-            heapify(heap, tamanho, i, copias);
+        for (int k = (n - 1) / 2; k >= 0; k--){
+            sink(heap, k, n, copias);
         }
-        
-        for (int i = tamanho - 1; i > 0; i--){
-            salvarEstadoOrdenacao(heap, 0, i, -1, copias);
-            trocar(heap, 0, i);
-            salvarEstadoOrdenacao(heap, 0, i, -1, copias);
-            
-            heapify(heap, i, 0, copias);
+        while (n > 0){
+            trocar(heap, 0, n);
+            salvarEstadoOrdenacao(heap, 0, n, -1, copias);
+            n--;
+            sink(heap, 0, n, copias);
         }
         
         salvarEstadoOrdenacao(heap, -1, -1, -1, copias);
+    
     }
     
-    private static void heapify ( int [] heap, int tamanho, int raiz, List<EstadoOrdenacao> copias){
-        int maior = raiz;
-        int esquerda = 2 * raiz + 1;
-        int direita = 2 * raiz + 2;
-        
-        if (esquerda < tamanho){
-            salvarEstadoOrdenacao(heap, raiz, esquerda, maior, copias);
-            
-            if (heap[esquerda] > heap[maior]){
-                maior = esquerda;
+    private static void sink (int[] heap, int k, int n, List<EstadoOrdenacao> copias){
+        while (2*k + 1 <= n){
+            int j = 2*k + 1;
+            if (j < n && heap[j] < heap[j + 1]){
+                j++;
             }
-        }
-        
-        if (direita < tamanho){
-            salvarEstadoOrdenacao(heap, raiz, direita, maior, copias);
-            
-            if (heap[direita] > heap[maior]){
-                maior = direita;
+            if (heap[k] >= heap[j]){
+                break;
             }
-        }
-        
-        if (maior != raiz){
-            salvarEstadoOrdenacao(heap, raiz, maior, maior, copias);
-            trocar(heap, raiz, maior);
-            salvarEstadoOrdenacao(heap, raiz, maior, maior, copias);
-            
-            heapify(heap, tamanho, maior, copias);
+            trocar(heap, k, j); 
+            salvarEstadoOrdenacao(heap, k, n, j, copias);
+            k = j;
         }
     }
-    
+            
 }

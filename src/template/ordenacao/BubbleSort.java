@@ -23,14 +23,15 @@ public class BubbleSort {
             trocado = false;
             for(int j = tamanho - 1; j > i; j--){
                 if (bubble[j-1] > bubble[j]){
-                    salvarEstadoOrdenacao(bubble, i, j, j - 1, copias);
                     trocar(bubble, j-1, j);
+                    salvarEstadoOrdenacao(bubble, j, j- 1, -1, copias);
                     trocado = true;
                 }
             }
             i++;
-             salvarEstadoOrdenacao(bubble, i, -1, -1, copias);
         } while (trocado && i < tamanho);
+        
+        salvarEstadoOrdenacao(bubble, -1, -1, -1, copias);
         
     }
     

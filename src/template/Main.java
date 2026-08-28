@@ -8,6 +8,7 @@ import br.com.davidbuzatto.jsge.image.Image;
 import br.com.davidbuzatto.jsge.imgui.GuiButton;
 import br.com.davidbuzatto.jsge.imgui.GuiComponent;
 import br.com.davidbuzatto.jsge.imgui.GuiLabel;
+import br.com.davidbuzatto.jsge.math.Vector2;
 import java.util.ArrayList;
 import java.util.List;
 import template.modelo.EstadoOrdenacao;
@@ -26,6 +27,12 @@ import static template.ordenacao.ShellSort.shellSort;
  */
 
 public class Main extends EngineFrame {
+    
+    private int[] casoMedio;
+    private int[] piorCaso;
+    private int[] melhorCaso;
+    private int[] arrayAtual;
+    private int[] arrayTemp;
     
     private int[] aSelection;
     private int[] aInsertion;
@@ -54,8 +61,8 @@ public class Main extends EngineFrame {
     private double tempoParaMudar;
     private double contadorTempo;
     
-    private List<GuiComponent> components;
-    private GuiButton SelectionButton;
+    //private List<GuiComponent> components;
+    //private GuiButton SelectionButton;
 
     
     public Main() { 
@@ -66,8 +73,8 @@ public class Main extends EngineFrame {
 
     @Override
     public void create() {
-        useAsDependencyForIMGUI();
-        components = new ArrayList<>();
+        //useAsDependencyForIMGUI();
+        //components = new ArrayList<>();
         
         copiaAtualSelection = 0;
         copiaAtualInsertion = 0;
@@ -82,9 +89,14 @@ public class Main extends EngineFrame {
         tempoParaMudar = 0.2;
         contadorTempo = 0;
         
+        arrayAtual = new int[]{9, 5, 4, 1, 2, 7, 6, 8, 3, 10};
+        
         aSelection = new int[]{9, 5, 4, 1, 2, 7, 6, 8, 3, 10};
         copiasSelection = new ArrayList<>();
         selectionSort(aSelection, copiasSelection);
+        
+        //SelectionButton = new GuiButton(15, 90, 305, 305, " ");
+        //components.add(SelectionButton);
         
         aInsertion = new int[]{9, 5, 4, 1, 2, 7, 6, 8, 3, 10};
         copiasInsertion = new ArrayList<>();
@@ -98,20 +110,18 @@ public class Main extends EngineFrame {
         copiasShell = new ArrayList<>();
         shellSort(aShell, copiasShell);
         
-        aMerge = new int [] { 9, 5, 4, 1, 2, 7, 6, 8, 3, 10 };
+        aMerge = new int[]{9, 5, 4, 1, 2, 7, 6, 8, 3, 10};;
         copiasMerge = new ArrayList<>();
         mergeSort(aMerge, copiasMerge);
         
-        aQuick = new int [] { 9, 5, 4, 1, 2, 7, 6, 8, 3, 10 };
+        aQuick = new int[]{9, 5, 4, 1, 2, 7, 6, 8, 3, 10};
         copiasQuick = new ArrayList<>();
         quickSort(aQuick, copiasQuick);
         
-        aHeap = new int [] { 9, 5, 4, 1, 2, 7, 6, 8, 3, 10 };
+        aHeap = new int[]{9, 5, 4, 1, 2, 7, 6, 8, 3, 10};
         copiasHeap = new ArrayList<>();
         heapSort (aHeap, copiasHeap);
-        
-        SelectionButton = new GuiButton(15, 90, 305, 305, "salve ");
-        components.add(SelectionButton);
+
         
       
     }
@@ -146,14 +156,23 @@ public class Main extends EngineFrame {
             }
             contadorTempo = 0;
         }
+        if (isKeyPressed(KEY_A)){
+            resetarCasoMedio();
+        }
+        if (isKeyPressed(KEY_W)){
+            resetarPiorCaso();
+        }
+        if (isKeyPressed(KEY_M)){
+            resetarMelhorCaso();
+        }
         
         if (isKeyPressed(KEY_R)){
             resetar();
         }
         
-        if (SelectionButton.isMousePressed()){
-            System.out.println(" botao apertou e foi bacana");
-        }
+        //if (SelectionButton.isMousePressed()){
+        //    System.out.println(" botao apertou");
+        //}
         
     }
   
@@ -179,7 +198,7 @@ public class Main extends EngineFrame {
         if(iniY < getScreenHeight() / 2){
             drawText(nomeOrdenacao, iniX, 10, 20, DARKPURPLE);
         } else {
-            drawText(nomeOrdenacao, iniX - 5, 665, 20, DARKPURPLE);
+            drawText(nomeOrdenacao, iniX, 665, 20, DARKPURPLE);
         }
                 
         tamanhoQuadrado = 5 + (tamanho + espacamento) * a.length;
@@ -246,8 +265,132 @@ public class Main extends EngineFrame {
         aHeap = new int [] { 9, 5, 4, 1, 2, 7, 6, 8, 3, 10 };
         copiasHeap = new ArrayList<>();
         heapSort(aHeap, copiasHeap);
-        
     }
+    
+    private void resetarPiorCaso(){
+        copiaAtualSelection = 0;
+        copiaAtualInsertion = 0;
+        copiaAtualBubble = 0;
+        copiaAtualShell = 0;
+        copiaAtualMerge = 0;
+        copiaAtualQuick = 0;
+        copiaAtualHeap = 0;
+        
+        tempoParaMudar = 0.2;
+        contadorTempo = 0;
+        
+        aSelection = new int[]{10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
+        copiasSelection =new ArrayList<>();
+        selectionSort(aSelection, copiasSelection);
+        
+        aInsertion = new int[]{10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
+        copiasInsertion =new ArrayList<>();
+        insertionSort(aInsertion, copiasInsertion);
+        
+        aBubble = new int[]{10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
+        copiasBubble =new ArrayList<>();
+        bubbleSort(aBubble, copiasBubble);
+        
+        aShell = new int[]{10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
+        copiasShell =new ArrayList<>();
+        shellSort(aShell, copiasShell);
+        
+        aMerge = new int[]{10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
+        copiasMerge = new ArrayList<>();
+        mergeSort(aMerge, copiasMerge);
+        
+        aQuick = new int[]{10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
+        copiasQuick = new ArrayList<>();
+        quickSort(aQuick, copiasQuick);
+        
+        aHeap = new int[]{10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
+        copiasHeap = new ArrayList<>();
+        heapSort(aHeap, copiasHeap);
+    }
+    
+    private void resetarMelhorCaso(){
+        copiaAtualSelection = 0;
+        copiaAtualInsertion = 0;
+        copiaAtualBubble = 0;
+        copiaAtualShell = 0;
+        copiaAtualMerge = 0;
+        copiaAtualQuick = 0;
+        copiaAtualHeap = 0;
+        
+        tempoParaMudar = 0.2;
+        contadorTempo = 0;
+        
+        aSelection = new int[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+        copiasSelection =new ArrayList<>();
+        selectionSort(aSelection, copiasSelection);
+        
+        aInsertion = new int[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+        copiasInsertion =new ArrayList<>();
+        insertionSort(aInsertion, copiasInsertion);
+        
+        aBubble = new int[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+        copiasBubble =new ArrayList<>();
+        bubbleSort(aBubble, copiasBubble);
+        
+        aShell = new int[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+        copiasShell =new ArrayList<>();
+        shellSort(aShell, copiasShell);
+        
+        aMerge = new int[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+        copiasMerge = new ArrayList<>();
+        mergeSort(aMerge, copiasMerge);
+        
+        aQuick = new int[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+        copiasQuick = new ArrayList<>();
+        quickSort(aQuick, copiasQuick);
+        
+        aHeap = new int[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+        copiasHeap = new ArrayList<>();
+        heapSort(aHeap, copiasHeap);
+    }
+    
+    private void resetarCasoMedio(){
+        copiaAtualSelection = 0;
+        copiaAtualInsertion = 0;
+        copiaAtualBubble = 0;
+        copiaAtualShell = 0;
+        copiaAtualMerge = 0;
+        copiaAtualQuick = 0;
+        copiaAtualHeap = 0;
+        
+        tempoParaMudar = 0.2;
+        contadorTempo = 0;
+        
+        aSelection = new int[]{5, 2, 9, 1, 7, 6, 10, 3, 8, 4};
+        copiasSelection =new ArrayList<>();
+        selectionSort(aSelection, copiasSelection);
+        
+        aInsertion = new int[]{5, 2, 9, 1, 7, 6, 10, 3, 8, 4};
+        copiasInsertion =new ArrayList<>();
+        insertionSort(aInsertion, copiasInsertion);
+        
+        aBubble = new int[]{5, 2, 9, 1, 7, 6, 10, 3, 8, 4};
+        copiasBubble =new ArrayList<>();
+        bubbleSort(aBubble, copiasBubble);
+        
+        aShell = new int[]{5, 2, 9, 1, 7, 6, 10, 3, 8, 4};
+        copiasShell =new ArrayList<>();
+        shellSort(aShell, copiasShell);
+        
+        aMerge = new int[]{5, 2, 9, 1, 7, 6, 10, 3, 8, 4};
+        copiasMerge = new ArrayList<>();
+        mergeSort(aMerge, copiasMerge);
+        
+        aQuick = new int[]{5, 2, 9, 1, 7, 6, 10, 3, 8, 4};
+        copiasQuick = new ArrayList<>();
+        quickSort(aQuick, copiasQuick);
+        
+        aHeap = new int[]{5, 2, 9, 1, 7, 6, 10, 3, 8, 4};
+        copiasHeap = new ArrayList<>();
+        heapSort(aHeap, copiasHeap);
+    }
+        
+        
     
     public static void main( String[] args ) {
         new Main();

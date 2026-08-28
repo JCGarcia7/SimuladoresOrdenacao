@@ -17,6 +17,7 @@ public class QuickSort {
     public static void quickSort ( int [] quick, List<EstadoOrdenacao> copias){
         salvarEstadoOrdenacao(quick, -1, -1, -1, copias);
         quickSort(quick, 0, quick.length - 1, copias);
+        salvarEstadoOrdenacao(quick, -1, -1, -1, copias);
     }
     
     private static int particao ( int[] quick, int inicio, int fim, List<EstadoOrdenacao> copias){
@@ -27,12 +28,10 @@ public class QuickSort {
         while (true){
             
             while (i <= fim && quick[i] < pivo){
-                salvarEstadoOrdenacao(quick, i, j, inicio, copias);
                 i++;
             }
             
             while (j > inicio && quick[j] > pivo){
-                salvarEstadoOrdenacao(quick, i, j, inicio, copias);
                 j--;
             }
             
@@ -40,7 +39,6 @@ public class QuickSort {
                 break;
             }
             
-            salvarEstadoOrdenacao(quick, i, j, inicio, copias);
             trocar(quick, i, j);
             salvarEstadoOrdenacao(quick, i, j, inicio, copias);
             
