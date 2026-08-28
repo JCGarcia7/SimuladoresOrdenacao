@@ -28,11 +28,11 @@ import static template.ordenacao.ShellSort.shellSort;
 
 public class Main extends EngineFrame {
     
-    private int[] casoMedio;
-    private int[] piorCaso;
-    private int[] melhorCaso;
-    private int[] arrayAtual;
-    private int[] arrayTemp;
+    private boolean casoMedio;
+    private boolean piorCaso;
+    private boolean melhorCaso;
+    
+    int[] arrayBase;
     
     private int[] aSelection;
     private int[] aInsertion;
@@ -61,8 +61,8 @@ public class Main extends EngineFrame {
     private double tempoParaMudar;
     private double contadorTempo;
     
-    //private List<GuiComponent> components;
-    //private GuiButton SelectionButton;
+    private List<GuiComponent> components;
+    private GuiButton melhorCasoButton;
 
     
     public Main() { 
@@ -74,7 +74,7 @@ public class Main extends EngineFrame {
     @Override
     public void create() {
         //useAsDependencyForIMGUI();
-        //components = new ArrayList<>();
+        components = new ArrayList<>();
         
         copiaAtualSelection = 0;
         copiaAtualInsertion = 0;
@@ -89,8 +89,8 @@ public class Main extends EngineFrame {
         tempoParaMudar = 0.2;
         contadorTempo = 0;
         
-        arrayAtual = new int[]{9, 5, 4, 1, 2, 7, 6, 8, 3, 10};
         
+            
         aSelection = new int[]{9, 5, 4, 1, 2, 7, 6, 8, 3, 10};
         copiasSelection = new ArrayList<>();
         selectionSort(aSelection, copiasSelection);
@@ -157,17 +157,52 @@ public class Main extends EngineFrame {
             contadorTempo = 0;
         }
         if (isKeyPressed(KEY_A)){
-            resetarCasoMedio();
+            casoMedio = true;
+            piorCaso = false;
+            melhorCaso = false;
+            
         }
         if (isKeyPressed(KEY_W)){
-            resetarPiorCaso();
-        }
+            casoMedio = false;
+            piorCaso = true;
+            melhorCaso = false;
+            }
+        
         if (isKeyPressed(KEY_M)){
-            resetarMelhorCaso();
+            casoMedio = false;
+            piorCaso = false;
+            melhorCaso = true;
         }
         
-        if (isKeyPressed(KEY_R)){
+        if (isKeyPressed(KEY_P)){
             resetar();
+            if (isKeyPressed(KEY_R)){
+                casoMedio = false;
+                piorCaso = false;
+                melhorCaso = false;
+            }
+        }
+        
+        if (isKeyPressed(KEY_ONE)){
+            resetarApenasSelection();
+        }
+        if (isKeyPressed(KEY_TWO)){
+            resetarApenasInsertion();
+        }
+        if (isKeyPressed(KEY_THREE)){
+            resetarApenasBubble();
+        }
+        if (isKeyPressed(KEY_FOUR)){
+            resetarApenasShell();
+        }
+        if (isKeyPressed(KEY_FIVE)){
+            resetarApenasMerge();
+        }
+        if (isKeyPressed(KEY_SIX)){
+            resetarApenasQuick();
+        }
+        if (isKeyPressed(KEY_SEVEN)){
+            resetarApenasHeap();
         }
         
         //if (SelectionButton.isMousePressed()){
@@ -238,159 +273,184 @@ public class Main extends EngineFrame {
         tempoParaMudar = 0.2;
         contadorTempo = 0;
         
-        aSelection = new int[]{9, 5, 4, 1, 2, 7, 6, 8, 3, 10};
+        if (casoMedio) {
+            arrayBase = new int[]{5, 2, 9, 1, 7, 6, 10, 3, 8, 4};
+        } else if (piorCaso) {
+            arrayBase = new int[]{10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
+        } else if (melhorCaso) {
+            arrayBase = new int[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+        } else {
+            arrayBase = new int[]{9, 5, 4, 1, 2, 7, 6, 8, 3, 10};
+        }
+        
+        aSelection = arrayBase.clone();
         copiasSelection =new ArrayList<>();
         selectionSort(aSelection, copiasSelection);
         
-        aInsertion = new int[]{9, 5, 4, 1, 2, 7, 6, 8, 3, 10};
+        aInsertion = arrayBase.clone();
         copiasInsertion =new ArrayList<>();
         insertionSort(aInsertion, copiasInsertion);
         
-        aBubble = new int[]{9, 5, 4, 1, 2, 7, 6, 8, 3, 10};
+        aBubble = arrayBase.clone();
         copiasBubble =new ArrayList<>();
         bubbleSort(aBubble, copiasBubble);
         
-        aShell = new int[]{9, 5, 4, 1, 2, 7, 6, 8, 3, 10};
+        aShell = arrayBase.clone();
         copiasShell =new ArrayList<>();
         shellSort(aShell, copiasShell);
         
-        aMerge = new int [] { 9, 5, 4, 1, 2, 7, 6, 8, 3, 10 };
+        aMerge = arrayBase.clone();
         copiasMerge = new ArrayList<>();
         mergeSort(aMerge, copiasMerge);
         
-        aQuick = new int [] { 9, 5, 4, 1, 2, 7, 6, 8, 3, 10 };
+        aQuick = arrayBase.clone();
         copiasQuick = new ArrayList<>();
         quickSort(aQuick, copiasQuick);
         
-        aHeap = new int [] { 9, 5, 4, 1, 2, 7, 6, 8, 3, 10 };
+        aHeap = arrayBase.clone();
         copiasHeap = new ArrayList<>();
         heapSort(aHeap, copiasHeap);
     }
-    
-    private void resetarPiorCaso(){
+        
+    private void resetarApenasSelection(){
         copiaAtualSelection = 0;
+        
+        tempoParaMudar = 0.2;
+        contadorTempo = 0;
+        
+        if (casoMedio){
+            aSelection = new int[]{5, 2, 9, 1, 7, 6, 10, 3, 8, 4};
+        } else if (piorCaso){
+            aSelection = new int[]{10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
+        } else if (melhorCaso){
+            aSelection = new int[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+        } else {
+            aSelection = new int[]{9, 5, 4, 1, 2, 7, 6, 8, 3, 10};
+        }
+        
+        copiasSelection =new ArrayList<>();
+        selectionSort(aSelection, copiasSelection);
+    }
+    
+    private void resetarApenasInsertion(){
         copiaAtualInsertion = 0;
+        
+        tempoParaMudar = 0.2;
+        contadorTempo = 0;
+        
+        if (casoMedio){
+            aInsertion = new int[]{5, 2, 9, 1, 7, 6, 10, 3, 8, 4};
+        } else if (piorCaso){
+            aInsertion = new int[]{10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
+        } else if (melhorCaso){
+            aInsertion = new int[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+        } else {
+            aInsertion = new int[]{9, 5, 4, 1, 2, 7, 6, 8, 3, 10};
+        }
+        
+        copiasInsertion =new ArrayList<>();
+        insertionSort(aInsertion, copiasInsertion);
+    }
+    
+    private void resetarApenasBubble(){
         copiaAtualBubble = 0;
+        
+        tempoParaMudar = 0.2;
+        contadorTempo = 0;
+        
+        if (casoMedio){
+            aBubble = new int[]{5, 2, 9, 1, 7, 6, 10, 3, 8, 4};
+        } else if (piorCaso){
+            aBubble = new int[]{10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
+        } else if (melhorCaso){
+            aBubble = new int[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+        } else {
+            aBubble = new int[]{9, 5, 4, 1, 2, 7, 6, 8, 3, 10};
+        }
+        
+        copiasBubble =new ArrayList<>();
+        bubbleSort(aBubble, copiasBubble);
+    }
+    
+    private void resetarApenasShell(){
         copiaAtualShell = 0;
+        
+        tempoParaMudar = 0.2;
+        contadorTempo = 0;
+        
+        if (casoMedio){
+            aShell = new int[]{5, 2, 9, 1, 7, 6, 10, 3, 8, 4};
+        } else if (piorCaso){
+            aShell = new int[]{10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
+        } else if (melhorCaso){
+            aShell = new int[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+        } else {
+            aShell = new int[]{9, 5, 4, 1, 2, 7, 6, 8, 3, 10};
+        }
+        
+        copiasShell =new ArrayList<>();
+        shellSort(aShell, copiasShell);
+    }
+    
+    private void resetarApenasMerge(){
         copiaAtualMerge = 0;
+        
+        tempoParaMudar = 0.2;
+        contadorTempo = 0;
+        
+        if (casoMedio){
+            aMerge = new int[]{5, 2, 9, 1, 7, 6, 10, 3, 8, 4};
+        } else if (piorCaso){
+            aMerge = new int[]{10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
+        } else if (melhorCaso){
+            aMerge = new int[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+        } else {
+            aMerge = new int[]{9, 5, 4, 1, 2, 7, 6, 8, 3, 10};
+        }
+        
+        copiasMerge =new ArrayList<>();
+        mergeSort(aMerge, copiasMerge);
+    }
+    
+    private void resetarApenasQuick(){
         copiaAtualQuick = 0;
+        
+        tempoParaMudar = 0.2;
+        contadorTempo = 0;
+        
+        if (casoMedio){
+            aQuick = new int[]{5, 2, 9, 1, 7, 6, 10, 3, 8, 4};
+        } else if (piorCaso){
+            aQuick = new int[]{10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
+        } else if (melhorCaso){
+            aQuick = new int[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+        } else {
+            aQuick = new int[]{9, 5, 4, 1, 2, 7, 6, 8, 3, 10};
+        }
+        
+        copiasQuick =new ArrayList<>();
+        quickSort(aQuick, copiasQuick);
+    }
+    
+    private void resetarApenasHeap(){
         copiaAtualHeap = 0;
         
         tempoParaMudar = 0.2;
         contadorTempo = 0;
         
-        aSelection = new int[]{10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
-        copiasSelection =new ArrayList<>();
-        selectionSort(aSelection, copiasSelection);
+        if (casoMedio){
+            aHeap = new int[]{5, 2, 9, 1, 7, 6, 10, 3, 8, 4};
+        } else if (piorCaso){
+            aHeap = new int[]{10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
+        } else if (melhorCaso){
+            aHeap = new int[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+        } else {
+            aHeap = new int[]{9, 5, 4, 1, 2, 7, 6, 8, 3, 10};
+        }
         
-        aInsertion = new int[]{10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
-        copiasInsertion =new ArrayList<>();
-        insertionSort(aInsertion, copiasInsertion);
-        
-        aBubble = new int[]{10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
-        copiasBubble =new ArrayList<>();
-        bubbleSort(aBubble, copiasBubble);
-        
-        aShell = new int[]{10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
-        copiasShell =new ArrayList<>();
-        shellSort(aShell, copiasShell);
-        
-        aMerge = new int[]{10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
-        copiasMerge = new ArrayList<>();
-        mergeSort(aMerge, copiasMerge);
-        
-        aQuick = new int[]{10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
-        copiasQuick = new ArrayList<>();
-        quickSort(aQuick, copiasQuick);
-        
-        aHeap = new int[]{10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
-        copiasHeap = new ArrayList<>();
+        copiasHeap =new ArrayList<>();
         heapSort(aHeap, copiasHeap);
     }
-    
-    private void resetarMelhorCaso(){
-        copiaAtualSelection = 0;
-        copiaAtualInsertion = 0;
-        copiaAtualBubble = 0;
-        copiaAtualShell = 0;
-        copiaAtualMerge = 0;
-        copiaAtualQuick = 0;
-        copiaAtualHeap = 0;
-        
-        tempoParaMudar = 0.2;
-        contadorTempo = 0;
-        
-        aSelection = new int[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-        copiasSelection =new ArrayList<>();
-        selectionSort(aSelection, copiasSelection);
-        
-        aInsertion = new int[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-        copiasInsertion =new ArrayList<>();
-        insertionSort(aInsertion, copiasInsertion);
-        
-        aBubble = new int[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-        copiasBubble =new ArrayList<>();
-        bubbleSort(aBubble, copiasBubble);
-        
-        aShell = new int[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-        copiasShell =new ArrayList<>();
-        shellSort(aShell, copiasShell);
-        
-        aMerge = new int[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-        copiasMerge = new ArrayList<>();
-        mergeSort(aMerge, copiasMerge);
-        
-        aQuick = new int[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-        copiasQuick = new ArrayList<>();
-        quickSort(aQuick, copiasQuick);
-        
-        aHeap = new int[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-        copiasHeap = new ArrayList<>();
-        heapSort(aHeap, copiasHeap);
-    }
-    
-    private void resetarCasoMedio(){
-        copiaAtualSelection = 0;
-        copiaAtualInsertion = 0;
-        copiaAtualBubble = 0;
-        copiaAtualShell = 0;
-        copiaAtualMerge = 0;
-        copiaAtualQuick = 0;
-        copiaAtualHeap = 0;
-        
-        tempoParaMudar = 0.2;
-        contadorTempo = 0;
-        
-        aSelection = new int[]{5, 2, 9, 1, 7, 6, 10, 3, 8, 4};
-        copiasSelection =new ArrayList<>();
-        selectionSort(aSelection, copiasSelection);
-        
-        aInsertion = new int[]{5, 2, 9, 1, 7, 6, 10, 3, 8, 4};
-        copiasInsertion =new ArrayList<>();
-        insertionSort(aInsertion, copiasInsertion);
-        
-        aBubble = new int[]{5, 2, 9, 1, 7, 6, 10, 3, 8, 4};
-        copiasBubble =new ArrayList<>();
-        bubbleSort(aBubble, copiasBubble);
-        
-        aShell = new int[]{5, 2, 9, 1, 7, 6, 10, 3, 8, 4};
-        copiasShell =new ArrayList<>();
-        shellSort(aShell, copiasShell);
-        
-        aMerge = new int[]{5, 2, 9, 1, 7, 6, 10, 3, 8, 4};
-        copiasMerge = new ArrayList<>();
-        mergeSort(aMerge, copiasMerge);
-        
-        aQuick = new int[]{5, 2, 9, 1, 7, 6, 10, 3, 8, 4};
-        copiasQuick = new ArrayList<>();
-        quickSort(aQuick, copiasQuick);
-        
-        aHeap = new int[]{5, 2, 9, 1, 7, 6, 10, 3, 8, 4};
-        copiasHeap = new ArrayList<>();
-        heapSort(aHeap, copiasHeap);
-    }
-        
-        
     
     public static void main( String[] args ) {
         new Main();
