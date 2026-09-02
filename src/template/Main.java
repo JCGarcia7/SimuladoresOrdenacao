@@ -28,6 +28,7 @@ import static template.ordenacao.ShellSort.shellSort;
 
 public class Main extends EngineFrame {
     
+    //criação dos arrays e ses estados/variações
     private boolean casoMedio;
     private boolean piorCaso;
     private boolean melhorCaso;
@@ -41,6 +42,8 @@ public class Main extends EngineFrame {
     private int[] aMerge;
     private int[] aQuick;
     private int[] aHeap;
+    
+    //criação das listas que vão deixar guardados os estados de troca de cada um dos algoritmos
     private List<EstadoOrdenacao> copiasSelection;
     private List<EstadoOrdenacao> copiasInsertion;
     private List<EstadoOrdenacao> copiasBubble;
@@ -56,14 +59,18 @@ public class Main extends EngineFrame {
     private int copiaAtualQuick;
     private int copiaAtualHeap;
     
+    //criação do tamanho do quadrado que compõe o contorno do algoritmo
     int tamanhoQuadrado;
     
+    //criação de variaveis para o update
     private double tempoParaMudar;
     private double contadorTempo;
     
+    /*
+    // tentativa de botão
     private List<GuiComponent> components;
     private GuiButton melhorCasoButton;
-
+    */
     
     public Main() { 
         super(1310, 720, "Simuladores Ordenação", 60, true);  
@@ -73,9 +80,16 @@ public class Main extends EngineFrame {
 
     @Override
     public void create() {
-        //useAsDependencyForIMGUI();
+        /*
+        // tentativa de botão
+        useAsDependencyForIMGUI();
         components = new ArrayList<>();
+        melhorCasoButton = new GuiButton(15, getScreenHeight() - 65, 100, 20, " ");
         
+        components.add(melhorCasoButton);
+        */
+        
+        //declaração/iniciação das variaveis criadas
         copiaAtualSelection = 0;
         copiaAtualInsertion = 0;
         copiaAtualBubble = 0;
@@ -94,9 +108,6 @@ public class Main extends EngineFrame {
         aSelection = new int[]{9, 5, 4, 1, 2, 7, 6, 8, 3, 10};
         copiasSelection = new ArrayList<>();
         selectionSort(aSelection, copiasSelection);
-        
-        //SelectionButton = new GuiButton(15, 90, 305, 305, " ");
-        //components.add(SelectionButton);
         
         aInsertion = new int[]{9, 5, 4, 1, 2, 7, 6, 8, 3, 10};
         copiasInsertion = new ArrayList<>();
@@ -128,6 +139,12 @@ public class Main extends EngineFrame {
 
     @Override
     public void update( double delta ) {
+        /*
+        // mais tentativa de botão
+        for ( GuiComponent c : components ) {
+            c.update( delta );
+        }
+        */
         
         contadorTempo += delta;
         
@@ -156,24 +173,30 @@ public class Main extends EngineFrame {
             }
             contadorTempo = 0;
         }
+        
+        // caso apertadar a letra "A" do teclado todos os arrays sao trocados para caso medio(average case)
         if (isKeyPressed(KEY_A)){
             casoMedio = true;
             piorCaso = false;
             melhorCaso = false;
             
         }
+        
+        // caso apertadar a letra "W" do teclado todos os arrays sao trocados para pior caso(worst case)
         if (isKeyPressed(KEY_W)){
             casoMedio = false;
             piorCaso = true;
             melhorCaso = false;
             }
         
-        if (isKeyPressed(KEY_M)){
+        // caso apertadar a letra "M" do teclado todos os arrays sao trocados para melhor caso(best case)
+        if (isKeyPressed(KEY_B)){
             casoMedio = false;
             piorCaso = false;
             melhorCaso = true;
         }
         
+        // "P"(Play) inicia as coisas, ou seja, começa a ordenar os arrays com o caso definido
         if (isKeyPressed(KEY_P)){
             resetar();
             if (isKeyPressed(KEY_R)){
@@ -183,6 +206,7 @@ public class Main extends EngineFrame {
             }
         }
         
+        // reseta apenas o selecionado
         if (isKeyPressed(KEY_ONE)){
             resetarApenasSelection();
         }
@@ -205,9 +229,12 @@ public class Main extends EngineFrame {
             resetarApenasHeap();
         }
         
-        //if (SelectionButton.isMousePressed()){
-        //    System.out.println(" botao apertou");
-        //}
+        /*
+        // tentativa de ver o botão funcionar
+        if (SelectionButton.isMousePressed()){
+            System.out.println(" botao apertou");
+        }
+        */
         
     }
   
@@ -236,6 +263,7 @@ public class Main extends EngineFrame {
             drawText(nomeOrdenacao, iniX, 665, 20, DARKPURPLE);
         }
                 
+        //desenha um quadrado envolta do array com base em seu tamnho e espaçamento 
         tamanhoQuadrado = 5 + (tamanho + espacamento) * a.length;
         drawRectangle(iniX - 5, iniY - getScreenHeight() / 2 + 60, tamanhoQuadrado, tamanhoQuadrado, BLACK);
         
@@ -273,6 +301,7 @@ public class Main extends EngineFrame {
         tempoParaMudar = 0.2;
         contadorTempo = 0;
         
+        //troca para o caso escolhido
         if (casoMedio) {
             arrayBase = new int[]{5, 2, 9, 1, 7, 6, 10, 3, 8, 4};
         } else if (piorCaso) {
@@ -283,6 +312,7 @@ public class Main extends EngineFrame {
             arrayBase = new int[]{9, 5, 4, 1, 2, 7, 6, 8, 3, 10};
         }
         
+        //pega uma copia do array base pois caso usado o arrayBase ele seria ordenado pelo selection e por mais nenhum outro
         aSelection = arrayBase.clone();
         copiasSelection =new ArrayList<>();
         selectionSort(aSelection, copiasSelection);
@@ -311,7 +341,9 @@ public class Main extends EngineFrame {
         copiasHeap = new ArrayList<>();
         heapSort(aHeap, copiasHeap);
     }
-        
+    
+    
+    //Aqui foi criado um resetar para cada um dos algoritmos para fazer isso de forma singular    
     private void resetarApenasSelection(){
         copiaAtualSelection = 0;
         
